@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { roleMenu, type Role } from "@/lib/data/menu";
+import { useRole } from "@/components/providers/RoleProvider";
+import { roleMenu } from "@/lib/data/menu";
 import { cn } from "@/lib/utils";
-
-const defaultRole: Role = "admin";
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const menu = roleMenu[defaultRole];
+  const { role } = useRole();
+  const menu = roleMenu[role];
 
   return (
     <aside

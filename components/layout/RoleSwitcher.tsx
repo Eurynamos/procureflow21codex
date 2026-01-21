@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,29 +7,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useRole } from "@/components/providers/RoleProvider";
 import type { Role } from "@/lib/data/menu";
 
 const roles: Role[] = ["admin", "fiscal", "contracting"];
 
 export function RoleSwitcher() {
-  const [currentRole, setCurrentRole] = useState<Role>("admin");
-
-  const handleSwitch = (role: Role) => {
-    setCurrentRole(role);
-  };
+  const { role, switchRole, isSwitching, error } = useRole();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant="secondary">Role: {currentRole}</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        {roles.map((role) => (
-          <DropdownMenuItem key={role} onClick={() => handleSwitch(role)}>
-            {role.toUpperCase()}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex flex-col items-end gap-1">
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant="secondary" disabled={isSwitching}>
+            Role: {role}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {roles.map((item) => (
+            <DropdownMenuItem key={item} onClick={() => switchRole(item)}>
+              {item.toUpperCase()}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {error ? <span className="text-xs text-rose-500">{error}</span> : null}
+    </div>
   );
 }
